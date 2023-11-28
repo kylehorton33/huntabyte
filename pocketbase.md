@@ -5,7 +5,7 @@ https://pocketbase.io/docs/
 ```console
 mkdir backend
 cd backend/
-??curl https://github.com/pocketbase/pocketbase/releases/download/v0.19.4/pocketbase_0.19.4_linux_amd64.zip 
+curl -L -o pb19 https://github.com/pocketbase/pocketbase/releases/download/v0.19.4/pocketbase_0.19.4_linux_amd64.zip
 unzip pb19
 rm pb19
 echo "/pb_data" >> .gitignore
@@ -21,16 +21,10 @@ Create the Svelte Application
 ```
 npm create svelte@latest web
 cd web
-npx svelte-add@latest tailwindcss
 npm i
-npm i -D daisyui
 npm i pocketbase
 ```
-In `tailwind.config.cjs` update to include `daisyui`.
 
-```javascript
-9   plugins: [require('daisyui')],
-```
 Add files to the `src/` directory:
 
 ```
@@ -41,9 +35,9 @@ Add files to the `src/` directory:
         ├── +layout.svelte
         └── +page.svelte
     ├── app.html
-    ├── app.pcss
     └── hooks.server.js
 ```
+
 Use `hooks.server.js` to instantiate link to PocketBase, get user cookie (if it exists), and make data avilable to app through `event.locals`
 
 ```javascript
@@ -100,21 +94,18 @@ Use the user info in `+layout.svelte`
 
 ```javascript
 <script>
-  import "../app.pcss";
-  import User from "$lib/components/User.svelte";
-  import NoUser from "$lib/components/NoUser.svelte";
   export let data;
 </script>
 
 <div class="min-h-full">
-  <nav class="navbar bg-base-100 border-b">
+  <nav>
       {#if !data.user}
-        <NoUser />
+        <PublicData />
       {:else}
-        <User />
+        <UserData />
       {/if}
   </nav>
-  <div class="py-10">
+  <div class="py-4">
       <slot />
   </div>
 </div>
