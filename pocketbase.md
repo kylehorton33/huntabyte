@@ -110,3 +110,56 @@ Use the user info in `+layout.svelte`
   </div>
 </div>
 ```
+
+Uploading Form Data
+
+```javascript
+// ./+page.svelte
+
+<script>
+  import { Input } from "$lib/components";
+</script>
+
+  <form
+    action="?/updateProfile"
+    method="POST"
+  >
+    <h3 class="text-2xl font-medium">Update Profile</h3>
+    <Input id="name" label="Name" value={data?.user?.name} />
+    <button type="submit">
+        Update Profile
+      </button>
+  </form>
+
+// ./+page.server.js
+
+import { error } from '@sveltejs/kit'
+
+export const actions = {
+    updateProfile: async({ request, locals }) => {
+        let data = await request.formData()
+
+        try {
+            const { name } = await locals.pb.collection('users').update(locals?.user?.id, data);
+            locals.user.name = name;
+        } catch (err) {
+            console.log(err)
+            throw error(400, 'Something went wrong updating your profile')
+        }
+
+        return {
+            success: true
+        }
+    }
+}
+```
+
+Specific considerations for uploading files
+
+```javascript
+
+// to fill in later
+
+// enctype="multipart/form-data"
+
+```
