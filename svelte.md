@@ -30,3 +30,50 @@ export { Icon }
 </div>
 ```
 
+# SvelteKit Hooks
+
+```javascript
+// src/hooks.server.js
+
+export const handle = async ({ event, resolve }) => {
+  event.locals.pb = SomeConnectionToDB();
+  event.locals.user = structuredClone(event.locals.db.getUser());
+
+  const response = await resolve(event);
+
+  return response;
+};
+
+// src/+layout.server.js
+
+export const load = ({ locals }) => {
+  if (locals.user) {
+    return { user: locals.user };
+  } else {
+    return {
+      user: undefined,
+    };
+  }
+};
+```
+
+```html
+<!-- src/+layout.svelte -->
+
+<script>
+  import "../app.pcss";  
+  export let data;
+</script>
+
+<div class="min-h-full">
+      {#if !data.user}
+        <PublicData />
+      {:else}
+        <UserData />
+      {/if}
+  <div class="py-4">
+      <slot />
+  </div>
+</div>
+
+```
