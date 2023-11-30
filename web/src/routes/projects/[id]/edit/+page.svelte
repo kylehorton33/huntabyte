@@ -51,7 +51,7 @@
             <div class="w-20 rounded">
               <img
                 src={getImageURL(
-                  data.host.host,
+                  data.project.host,
                   data.project.collectionId,
                   data.project.id,
                   data.project.thumbnail,
