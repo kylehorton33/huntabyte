@@ -1,6 +1,8 @@
 const { randomBytes } = await
 import ('node:crypto')
 
+const PB_HOST = process.env.POCKETBASE_HOST || "http://localhost:8090";
+
 export const serializeNonPOJOs = (obj) => {
     return structuredClone(obj)
 }
@@ -11,5 +13,5 @@ export const generateUsername = (name) => {
 }
 
 export const getImageURL = (collectionId, recordId, fileName, size = '0x0') => {
-    return `http://localhost:8090/api/files/${collectionId}/${recordId}/${fileName}?thumb=${size}`
+    return `${PB_HOST}/api/files/${collectionId}/${recordId}/${fileName}?thumb=${size}`
 }
