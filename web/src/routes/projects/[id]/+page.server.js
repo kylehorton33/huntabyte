@@ -6,6 +6,7 @@ export const load = ({ locals, params }) => {
       const project = structuredClone(
         await locals.pb.collection("projects").getOne(id)
       );
+      project.host = locals.user.host;
       return project;
     } catch (err) {
       console.log(err);

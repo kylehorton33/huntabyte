@@ -9,6 +9,7 @@
       <img
         src={data.project.thumbnail
           ? getImageURL(
+              data.host.host,
               data.project.collectionId,
               data.project.id,
               data.project.thumbnail,

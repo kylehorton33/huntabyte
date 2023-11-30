@@ -10,6 +10,7 @@ export const load = async ({ locals, params }) => {
     );
 
     if (locals.user.id === project.user) {
+      project.host = locals.user.host;
       return {
         project,
       };
