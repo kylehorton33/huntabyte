@@ -1,18 +1,25 @@
-import PocketBase from 'pocketbase'
+import PocketBase from "pocketbase";
 
-export const handle = async({event, resolve}) => {
-    event.locals.pb = new PocketBase('http://localhost:8090')
-    event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '')
+const PB_HOST = process.env.POCKETBASE_HOST || "http://localhost:8090";
 
-    if (event.locals.pb.authStore.isValid) {
-        event.locals.user = structuredClone(event.locals.pb.authStore.model)
-    } else {
-        event.locals.user = undefined
-    }
+export const handle = async ({ event, resolve }) => {
+  event.locals.pb = new PocketBase(PB_HOST);
+  event.locals.pb.authStore.loadFromCookie(
+    event.request.headers.get("cookie") || ""
+  );
 
-    const response = await resolve(event);
+  if (event.locals.pb.authStore.isValid) {
+    event.locals.user = structuredClone(event.locals.pb.authStore.model);
+  } else {
+    event.locals.user = undefined;
+  }
 
-    response.headers.set('set-cookie', event.locals.pb.authStore.exportToCookie({ secure: false }))
+  const response = await resolve(event);
 
-    return response;
-}
+  response.headers.set(
+    "set-cookie",
+    event.locals.pb.authStore.exportToCookie({ secure: false })
+  );
+
+  return response;
+};
