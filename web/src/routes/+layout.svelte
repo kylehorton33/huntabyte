@@ -30,6 +30,7 @@
               <img
                 src={data.user?.avatar
                   ? getImageURL(
+                      data.user?.host,
                       data.user?.collectionId,
                       data.user?.id,
                       data.user?.avatar

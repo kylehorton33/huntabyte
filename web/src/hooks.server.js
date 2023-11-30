@@ -10,6 +10,7 @@ export const handle = async ({ event, resolve }) => {
 
   if (event.locals.pb.authStore.isValid) {
     event.locals.user = structuredClone(event.locals.pb.authStore.model);
+    event.locals.user.host = PB_HOST;
   } else {
     event.locals.user = undefined;
   }
