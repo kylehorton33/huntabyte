@@ -8,13 +8,18 @@ export const handle = async ({ event, resolve }) => {
     event.request.headers.get("cookie") || ""
   );
 
-  if (event.locals.pb.authStore.isValid) {
-    event.locals.user = structuredClone(event.locals.pb.authStore.model);
-    event.locals.user.host = PB_HOST;
-  } else {
+  try {
+    if (event.locals.pb.authStore.isValid) {
+      await event.locals.pb.collection("users").authRefresh();
+      event.locals.user = structuredClone(event.locals.pb.authStore.model);
+      event.locals.user.host = PB_HOST;
+    }
+  } catch (error) {
+    console.log(error);
+    event.locals.pb.authStore.clear();
     event.locals.user = undefined;
   }
-
+  
   const response = await resolve(event);
 
   response.headers.set(
